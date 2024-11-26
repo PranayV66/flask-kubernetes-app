@@ -14,7 +14,8 @@ services:
       - app-network
 
   backend:
-    build: ./backend
+    image: pranayv6664/flask-backend:1.0
+    #build: ./backend
     container_name: backend
     environment:
       POSTGRES_HOST: postgres
@@ -29,7 +30,8 @@ services:
       - "5000:5000"
 
   frontend:
-    build: ./frontend
+    image: pranayv6664/flask-frontend:1.0
+    #build: ./frontend
     container_name: frontend
     environment:
       BACKEND_API_URL: http://backend:5000/api/data
