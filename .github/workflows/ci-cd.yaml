@@ -33,10 +33,10 @@ jobs:
 
       - name: Update Backend Image Tag in Helm Values YAML
         run: |
-          yq eval '.image.tag = "${{ github.sha }}"' -i ./charts/flask-kubernetes-app/values.yaml
+          yq eval '.image.tag = "${{ github.sha }}"' -i ../../charts/flask-kubernetes-app/values.yaml
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
-          git add ./charts/flask-kubernetes-app/values.yaml
+          git add ../../charts/flask-kubernetes-app/values.yaml
           git commit -m "Update backend image tag to ${{ github.sha }}" || echo "No changes to commit"
 
       - name: Push changes to repository
@@ -72,10 +72,10 @@ jobs:
 
       - name: Update Frontend image name in Helm Values yaml
         run: |
-          yq eval '.imageFrontend.tag = "${{ github.sha }}"' -i ./charts/flask-kubernetes-app/values.yaml
+          yq eval '.imageFrontend.tag = "${{ github.sha }}"' -i ../../charts/flask-kubernetes-app/values.yaml
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
-          git add ./charts/flask-kubernetes-app/values.yaml
+          git add ../../charts/flask-kubernetes-app/values.yaml
           git commit -m "Update frontend image tag to ${{ github.sha }}" || echo "No changes to commit"
 
       - name: Push changes to repository
@@ -99,14 +99,14 @@ jobs:
 
       - name: Package Helm Chart
         run: |
-          helm dependency update ./charts/flask-kubernetes-app
-          helm package ./charts/flask-kubernetes-app --destination ./charts
+          helm dependency update ../../charts/flask-kubernetes-app
+          helm package ../../charts/flask-kubernetes-app --destination ../../charts
 
       - name: Upload Helm Charts Artifact
         uses: actions/upload-artifact@v3
         with:
           name: helm-charts
-          path: ./charts/*.tgz
+          path: ../../charts/*.tgz
 
       - name: Trigger Helm Github Repo Workflow
         uses: peter-evans/repository-dispatch@v3
