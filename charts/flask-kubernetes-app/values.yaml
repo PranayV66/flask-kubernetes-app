@@ -1,0 +1,58 @@
+replicaCount: 1
+
+image:
+  repository: pranayv6664/flask-backend
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "1.0"
+
+imageFrontend:
+  repository: pranayv6664/flask-frontend
+  pullPolicy: IfNotPresent
+  tag: "1.0"
+
+service:
+  type: ClusterIP
+  port: 5000
+
+serviceFrontend:
+  type: NodePort
+  port: 80
+  nodePort: 30001
+
+global:
+  postgresql:
+    auth:
+      postgresPassword: "password"
+      username: "postgres"
+      password: "password"
+      database: "mydb"
+    service:
+      port: 5432
+    persistence:
+      enabled: true
+      storageClass: "local-path"
+      size: 8Gi
+    initdbScripts:
+      init.sql: |
+        CREATE TABLE IF NOT EXISTS items (
+          id SERIAL PRIMARY KEY,
+          name TEXT NOT NULL,
+          value INTEGER NOT NULL
+        );
+        INSERT INTO items (name, value) VALUES ('Item 1', 100);
+        INSERT INTO items (name, value) VALUES ('Item 2', 200);
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 256Mi
+  requests:
+    cpu: 250m
+    memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: "{{ .Values.imageFrontend.repository }}:{{ .Values.imageFrontend.tag }}"
+          imagePullPolicy: {{ .Values.imageFrontend.pullPolicy }}
+          ports:
+            - containerPort: 80
+          env:
+            - name: BACKEND_API_URL
+              value: http://backend:{{ .Values.service.port }}/api/data
+          resources:
+            limits:
+              cpu: {{ .Values.resources.limits.cpu }}
+              memory: {{ .Values.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}

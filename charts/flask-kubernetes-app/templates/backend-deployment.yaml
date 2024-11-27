@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 5000
+          env:
+            - name: POSTGRES_HOST
+              value: {{ include "flask-kubernetes-app.fullname" . }}-postgresql
+              #value: postgresql
+            - name: POSTGRES_DB
+              value: {{ .Values.global.postgresql.auth.database }}
+                #value: "mydb"
+            - name: POSTGRES_USER
+              value: {{ .Values.global.postgresql.auth.username }}
+                #value: "postgres"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  #name: postgresql
+                  name: {{ include "flask-kubernetes-app.fullname" . }}-postgresql
+                  key: postgres-password
+
+          resources:
+            limits:
+              cpu: {{ .Values.resources.limits.cpu }}
+              memory: {{ .Values.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}
