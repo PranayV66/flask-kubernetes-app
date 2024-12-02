@@ -3,7 +3,7 @@ image:
   repository: pranayv6664/flask-backend
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "c61a6545361636c44e74a5e3f6eaf00e2d4f0f2c"
+  tag: "33c6830037fa3477dc52f0352b71a107107fda68"
 imageFrontend:
   repository: pranayv6664/flask-frontend
   pullPolicy: IfNotPresent
