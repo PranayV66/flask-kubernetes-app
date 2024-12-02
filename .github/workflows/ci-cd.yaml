@@ -47,6 +47,7 @@ jobs:
           branch: main
 
   build-frontend:
+    needs: build-backend
     runs-on: ubuntu-latest
 
     steps:
