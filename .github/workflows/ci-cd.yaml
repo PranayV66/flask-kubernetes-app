@@ -135,4 +135,3 @@ jobs:
           repository: PranayV66/flask-kubernetes-app-helm
           event-type: publish-helm-charts
           client-payload: '{"ref": "main"}'
-
