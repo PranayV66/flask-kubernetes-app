@@ -109,6 +109,19 @@ jobs:
           helm dependency update ./charts/flask-kubernetes-app
           helm package ./charts/flask-kubernetes-app --destination ./charts
 
+      - name: Pull Latest Changes
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+
+      - name: Commit and Push Helm Chart
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add ./charts/*.tgz
+          git commit -m "Add packaged Helm charts" || echo "No changes to commit"
+          git push origin main
+
       - name: Upload Helm Charts Artifact
         uses: actions/upload-artifact@v3
         with:
