@@ -7,7 +7,7 @@ image:
 imageFrontend:
   repository: pranayv6664/flask-frontend
   pullPolicy: IfNotPresent
-  tag: "48294342e87a4d267a1d5cc21f770798e4a1c5cd"
+  tag: "5c92d75ebede2dcb0f19312501e3022bb9f65bc2"
 service:
   type: ClusterIP
   port: 5000
