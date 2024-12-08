@@ -26,10 +26,10 @@ spec:
               value: {{ include "flask-kubernetes-app.fullname" . }}-postgresql
               #value: postgresql
             - name: POSTGRES_DB
-              value: {{ .Values.global.postgresql.auth.database }}
+              value: {{ .Values.postgresql.auth.database }}
                 #value: "mydb"
             - name: POSTGRES_USER
-              value: {{ .Values.global.postgresql.auth.username }}
+              value: {{ .Values.postgresql.auth.username }}
                 #value: "postgres"
             - name: POSTGRES_PASSWORD
               valueFrom:

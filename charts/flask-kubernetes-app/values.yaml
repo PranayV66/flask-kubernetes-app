@@ -15,31 +15,32 @@ serviceFrontend:
   type: NodePort
   port: 80
   nodePort: 30001
-global:
-  postgresql:
-    auth:
-      postgresPassword: "password"
-      username: "postgres"
-      password: "password"
-      database: "mydb"
-    service:
-      port: 5432
-    persistence:
-      enabled: true
-      storageClass: "local-path"
-      size: 8Gi
-    initdbScripts:
-      init.sql: |
-        CREATE TABLE IF NOT EXISTS items (
-          id SERIAL PRIMARY KEY,
-          name TEXT NOT NULL,
-          value INTEGER NOT NULL
-        );
-        INSERT INTO items (name, value) VALUES ('Item 1', 100);
-        INSERT INTO items (name, value) VALUES ('Item 2', 200);
+postgresql:
+  auth:
+    postgresPassword: "password"
+    username: "postgres"
+    password: "password"
+    database: "mydb"
+  primary:
+    initdb:
+      scripts:
+        init.sql: |
+          CREATE TABLE IF NOT EXISTS items (
+            id SERIAL PRIMARY KEY,
+            name TEXT NOT NULL,
+            value INTEGER NOT NULL
+          );
+          INSERT INTO items (name, value) VALUES ('Item 1', 100);
+          INSERT INTO items (name, value) VALUES ('Item 2', 200);
+  service:
+    port: 5432
+  persistence:
+    enabled: true
+    storageClass: "local-path"
+    size: 8Gi
 resources:
   limits:
-    cpu: 500m
+    cpu: 250m
     memory: 256Mi
   requests:
     cpu: 250m
