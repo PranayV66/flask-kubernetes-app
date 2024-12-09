@@ -92,7 +92,7 @@ jobs:
           #yq eval ".version = \"$new_version\"" -i ./charts/flask-kubernetes-app/Chart.yaml
           # Increment version tag in Chart.yaml end
           git add ./charts/flask-kubernetes-app/values.yaml
-          git add .charts/flask-kubernetes-app/Chart.yaml
+          #git add .charts/flask-kubernetes-app/Chart.yaml
           git commit -m "Update frontend image tag to ${{ github.sha }}" || echo "No changes to commit"
 
       - name: Push changes to repository
