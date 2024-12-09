@@ -83,13 +83,13 @@ jobs:
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           # Increment version tag in Chart.yaml start
-          current_version=$(yq eval '.version' ./charts/flask-kubernetes-app/Chart.yaml)
-          IFS='.' read -r major minor patch <<< "$current version"
-          patch=$((patch+1))
-          new_version="$major.$minor.$patch"
-          echo "Current version: $current version"
-          echo "New version: $new_version"
-          yq eval ".version = \"$new_version\"" -i ./charts/flask-kubernetes-app/Chart.yaml
+          #current_version=$(yq eval '.version' ./charts/flask-kubernetes-app/Chart.yaml)
+          #IFS='.' read -r major minor patch <<< "$current version"
+          #patch=$((patch+1))
+          #new_version="$major.$minor.$patch"
+          #echo "Current version: $current version"
+          #echo "New version: $new_version"
+          #yq eval ".version = \"$new_version\"" -i ./charts/flask-kubernetes-app/Chart.yaml
           # Increment version tag in Chart.yaml end
           git add ./charts/flask-kubernetes-app/values.yaml
           git add .charts/flask-kubernetes-app/Chart.yaml
