@@ -77,12 +77,22 @@ jobs:
           push: true
           tags: pranayv6664/flask-frontend:${{ github.sha }}
 
-      - name: Update Frontend image name in Helm Values yaml
+      - name: Update Frontend image name in Helm Values yaml & Update chart version in Chart.yaml
         run: |
           yq eval '.imageFrontend.tag = "${{ github.sha }}"' -i ./charts/flask-kubernetes-app/values.yaml
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
+          # Increment version tag in Chart.yaml start
+          current_version=$(yq eval '.version' ./charts/flask-kubernetes-app/Chart.yaml)
+          IFS='.' read -r major minor patch <<< "$current version"
+          patch=$((patch+1))
+          new_version="$major.$minor.$patch"
+          echo "Current version: $current version"
+          echo "New version: $new_version"
+          yq eval ".version = \"$new_version\"" -i ./charts/flask-kubernetes-app/Chart.yaml
+          # Increment version tag in Chart.yaml end
           git add ./charts/flask-kubernetes-app/values.yaml
+          git add .charts/flask-kubernetes-app/Chart.yaml
           git commit -m "Update frontend image tag to ${{ github.sha }}" || echo "No changes to commit"
 
       - name: Push changes to repository
