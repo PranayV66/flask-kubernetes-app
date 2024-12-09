@@ -5,7 +5,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>List of items in the database</h1>
+    <h1>Version 6 of the App</h1>
+    <h2>This new line was introduced in Version 6 of the App</h2>
     <ul>
         {% for item in items %}
             <li>{{ item.name }}: {{ item.value }}</li>
