@@ -77,22 +77,12 @@ jobs:
           push: true
           tags: pranayv6664/flask-frontend:${{ github.sha }}
 
-      - name: Update Frontend image name in Helm Values yaml & Update chart version in Chart.yaml
+      - name: Update Frontend image name in Helm Values yaml
         run: |
           yq eval '.imageFrontend.tag = "${{ github.sha }}"' -i ./charts/flask-kubernetes-app/values.yaml
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
-          # Increment version tag in Chart.yaml start
-          #current_version=$(yq eval '.version' ./charts/flask-kubernetes-app/Chart.yaml)
-          #IFS='.' read -r major minor patch <<< "$current version"
-          #patch=$((patch+1))
-          #new_version="$major.$minor.$patch"
-          #echo "Current version: $current version"
-          #echo "New version: $new_version"
-          #yq eval ".version = \"$new_version\"" -i ./charts/flask-kubernetes-app/Chart.yaml
-          # Increment version tag in Chart.yaml end
           git add ./charts/flask-kubernetes-app/values.yaml
-          #git add .charts/flask-kubernetes-app/Chart.yaml
           git commit -m "Update frontend image tag to ${{ github.sha }}" || echo "No changes to commit"
 
       - name: Push changes to repository
@@ -108,6 +98,31 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+
+      - name: Pull Latest Changes
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+
+      - name: Increment Chart Version and commit to Git
+        run: |
+          current_version=$(yq eval '.version' ./charts/flask-kubernetes-app/Chart.yaml)
+          IFS='.' read -r major minor patch <<< "$current_version"
+          patch=$((patch+1))
+          new_version="$major.$minor.$patch"
+          echo "Current version: $current_version"
+          echo "New version: $new_version"
+          yq eval ".version = \"$new_version\"" -i ./charts/flask-kubernetes-app/Chart.yaml
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add ./charts/flask-kubernetes-app/Chart.yaml
+          git commit -m "Update frontend image tag to ${{ github.sha }}" || echo "No changes to commit"
+
+      - name: Push changes to repository
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GH_PAT }}
+          branch: main
 
       - name: Set up Helm
         uses: azure/setup-helm@v4.2.0
@@ -145,10 +160,3 @@ jobs:
           repository: PranayV66/flask-kubernetes-app-helm
           event-type: publish-helm-charts
           client-payload: '{"ref": "main"}'
-
-      - name: Push charts to Nexus
-        run: |
-          helm repo add flask-kubernetes-app-nexus-repo http://44.202.83.28:31077/repository/flask-kubernetes-app/ \
-            --username ${{ secrets.NEXUS_USERNAME }} \
-            --password ${{ secrets.NEXUS_PASSWORD }}
-          helm push ./charts/flask-kubernetes-app-*.tgz flask-kubernetes-app-nexus-repo
