@@ -148,5 +148,7 @@ jobs:
 
       - name: Push charts to Nexus
         run: |
-          curl -u ${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }} http://44.202.83.28:31077/repository/flask-kubernetes-app/ --upload-file ./charts/flask-kubernetes-app-*.tgz
-
+          helm repo add flask-kubernetes-app-nexus-repo http://44.202.83.28:31077/repository/flask-kubernetes-app/ \
+            --username ${{ secrets.NEXUS_USERNAME }} \
+            --password ${{ secrets.NEXUS_PASSWORD }}
+          helm push ./charts/flask-kubernetes-app-*.tgz flask-kubernetes-app-nexus-repo
