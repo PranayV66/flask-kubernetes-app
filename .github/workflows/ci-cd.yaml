@@ -149,3 +149,4 @@ jobs:
       - name: Push charts to Nexus
         run: |
           curl -u ${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }} http://44.202.83.28:31077/repository/flask-kubernetes-app/ --upload-file ./charts/flask-kubernetes-app-*.tgz
+
